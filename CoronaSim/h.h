@@ -38,11 +38,19 @@ public:
         status = "Healed";
     }
     
+    void Die() {
+        //Set the status of person to Dead
+        status = "Dead";
+    }
+    
+    
     void changePosition(int x, int y) {
         // Set the position of the person to [x,y]
         position[0] = x;
         position[1] = y;
     }
+    
+    
     
     
 };
