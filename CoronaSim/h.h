@@ -25,12 +25,17 @@ public:
     // Which group is the person in
     int group;
     
+    Person() {}
     
     
-    
-    void infect() {
+    bool infect() {
         // Set status of person to Sick
+        bool x = 0;
+        if (status == "Healthy") {x = 1;}
+        
         status = "Sick";
+        
+        return x;
     }
     
     void heal() {
@@ -50,10 +55,33 @@ public:
         position[1] = y;
     }
     
-    
-    
-    
 };
+
+
+
+// Shuffle a random group of people
+void shuffle(int nunmberToShuffle) {
+    // Shuffle the number of people inputted, the number inputted is the number of pairs
+    // Have to make sure that all vectors are unique
+    
+    
+}
+
+
+
+// Spread the virus to the immediately adjacent people
+void spread() {
+    // Have to parse through each person and if infected then infect adjacent
+    
+    
+}
+
+
+
+
+
+
+
 
 
 

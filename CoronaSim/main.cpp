@@ -12,20 +12,36 @@
 
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
     
-    Person Lucas;
+    // Set number of people
+    int Length = 5;
+    int Width = 5;
     
-    std::cout << Lucas.status << "\n";
     
-    Lucas.infect();
+    // Create the 1D array of people
+    Person Group[Length*Width];
     
-    std::cout << Lucas.status << "\n";
+    // Create the position vector and assign their indexes
+    int positionReference[Length][Width];
+
+    for (int i = 0; i < Length; i++) {
+        for (int j = 0; j < Width; j++) {
+            // Set initial positions
+            positionReference[i][j] = 5*i + j;
+        }
+    }
     
-    Lucas.changePosition(2, 3);
+//    // Test the indices of the positionReference
+//    for (int i = 0; i < Length; i++) {
+//        for (int j = 0; j < Width; j++) {
+//            // Set initial positions
+//            std::cout << positionReference[i][j] << "\n";
+//        }
+//    }
     
-    std::cout << Lucas.position[0] << Lucas.position[1] << "\n";
+    
+    // Infect a random person
+    Group[rand() % (Length*Width)].infect();
     
     
     return 0;
