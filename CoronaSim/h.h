@@ -12,7 +12,7 @@
 class Person {
 public:
     // Is the person infected
-    std::string status = "Healthy";
+    std::string status = "H";
     // Has the person been infected and then healed
     
     
@@ -31,9 +31,9 @@ public:
     bool infect() {
         // Set status of person to Sick
         bool x = 0;
-        if (status == "Healthy") {x = 1;}
+        if (status == "H") {x = 1;}
         
-        status = "Sick";
+        status = "S";
         
         return x;
     }
@@ -58,7 +58,6 @@ public:
 };
 
 
-
 // Shuffle a random group of people
 void shuffle(int nunmberToShuffle) {
     // Shuffle the number of people inputted, the number inputted is the number of pairs
@@ -70,10 +69,10 @@ void shuffle(int nunmberToShuffle) {
 
 
 // Spread the virus to the immediately adjacent people
-void spread() {
+int spread(int &position, Person &Group, int Length, int Width) {
     // Have to parse through each person and if infected then infect adjacent
     
-    
+    return Group.position[0];
 }
 
 
