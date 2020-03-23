@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <vector>
 #include "h.h"
 
 
@@ -23,6 +24,11 @@ int main(int argc, const char * argv[]) {
     
     // Create the position vector and assign their indexes
     int positionReference[Length][Width];
+    
+    
+    
+    
+    
 
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
@@ -40,16 +46,27 @@ int main(int argc, const char * argv[]) {
 //    }
     
     
+    
+    int test1 = 0;
+    test1 = spreadInfection((int*)positionReference, Group, Length, Width);
+    std::cout << test1 << "\n";
+    std::cout << positionReference[1][3] << "\n";
+    
+    
     // Infect a random person
     int vector = rand() % (Length*Width);
-    std::cout << vector << "\n";
+    //std::cout << vector << "\n";
+    vector = 24;
     Group[vector].infect();
-    Group[18].infect();
+
     
+
     for (int i = 0; i < Length; i++) {
         std::cout << Group[5*i].status << Group[5*i + 1].status << Group[5*i + 2].status << Group[5*i + 3].status << Group[5*i + 4].status << "\n";
     }
     std::cout << "\n";
+    
+    
     
     //Create temporary array to keep track of who to make sick
     int tempSick [Length][Width] = {0};
@@ -76,6 +93,8 @@ int main(int argc, const char * argv[]) {
         }
         
     }
+    
+    
     
 //    // Visualize tempSick Matrix
 //    for (int i = 0; i < Length; i++) {

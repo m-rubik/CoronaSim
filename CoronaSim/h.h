@@ -69,13 +69,26 @@ void shuffle(int nunmberToShuffle) {
 
 
 // Spread the virus to the immediately adjacent people
-int spread(int &position, Person &Group, int Length, int Width) {
+int spreadInfection(int * positionReference, Person Group[], int Length, int Width) {
     // Have to parse through each person and if infected then infect adjacent
     
-    return Group.position[0];
+    
+    Group[0].infect();
+    
+    *(positionReference + 4) = 15;
+    
+    
+    
+    return *(positionReference + 1*Length + 2);
 }
 
+// I can pass an array to the function and then change the original array
+// int * positionReference in declaration and (int*)positionReference in call
 
+// i can call the values of an array in the function
+// *(positionReference + 2*Length + 3)
+
+// Should I be using std::vector?
 
 
 
