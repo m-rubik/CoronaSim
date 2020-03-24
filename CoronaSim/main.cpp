@@ -37,10 +37,7 @@ int main(int argc, const char * argv[]) {
     
     // Create history of Healthy, Sick, Healed and Dead people
     int censusHistory[noCycles][4] = {0};
-//    int jk = 0;
-//    census((int*) censusHistory[jk], Group, Length, Width);
-//
-//    std::cout << censusHistory[jk][0] << censusHistory[jk][1] << censusHistory[jk][2] << censusHistory[jk][3] << "\n";
+    // int censusHistory[4][noCycles] = {0};  //This could be more helpful for plotting
     
     
     // Infect a random person
@@ -49,16 +46,19 @@ int main(int argc, const char * argv[]) {
     Group[vector].infect();
     
     // Display first infected person
-    displayGroup(Group, Length, Width, 1);
+    displayGroup(Group, Length, Width);
+    census((int*) censusHistory[0], Group, Length, Width, 1);
     
     // Infect surrounding people
     for (int i = 0; i < noCycles; i++) {
         spreadInfection((int*)positionReference, Group, Length, Width, contagionFactor);
         
-        displayGroup(Group, Length, Width, 0);
+        displayGroup(Group, Length, Width);
         
-        census((int*) censusHistory[i], Group, Length, Width);
+        census((int*) censusHistory[i], Group, Length, Width, 1);
         
+        
+        // Test print of censusHistory
         std::cout << censusHistory[i][0] << " " << censusHistory[i][1] << " " << censusHistory[i][2] << " " << censusHistory[i][3] << "\n";
         
         shuffleGroup(noSwitches, Group, Length, Width);

@@ -58,7 +58,7 @@ public:
 };
 
 // Display the current status of the group
-void displayGroup (Person Group[], int Length, int Width, int flag) {
+void displayGroup (Person Group[], int Length, int Width) {
     // Display the current status of the group
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
@@ -68,31 +68,16 @@ void displayGroup (Person Group[], int Length, int Width, int flag) {
     }
     std::cout << "\n";
     
-    // Display the current Healthy and Sick Count
-//    int healthyCount = 0;
-//    int sickCount = 0;
-//    int healedCount = 0;
-//    int deadCount = 0;
-//    if (flag == 1) {
-//        for (int i = 0; i < Length; i++) {
-//            for (int j = 0; j < Width; j++) {
-//                if (Group[Length*i + j].status == ".") {healthyCount++;}
-//                if (Group[Length*i + j].status == "+") {sickCount++;}
-//                if (Group[Length*i + j].status == "-") {healedCount++;}
-//                if (Group[Length*i + j].status == " ") {deadCount++;}
-//            }
-//        }
-//
-//    }
-//    std::cout << "Healthy: " << healthyCount << "\n";
-//    std::cout << "Sick:    " << sickCount << "\n";
-//    std::cout << "Healed: " << healedCount << "\n";
-//    std::cout << "Dead:    " << deadCount << "\n";
-    
 }
 
-void census(int * census, Person Group[], int Length, int Width) {
+
+// Save the current census of the group to census array
+void census(int * census, Person Group[], int Length, int Width, int printFlag) {
     
+    census[0] = 0;
+    census[1] = 0;
+    census[2] = 0;
+    census[3] = 0;
     
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
@@ -103,10 +88,12 @@ void census(int * census, Person Group[], int Length, int Width) {
         }
     }
     
-    std::cout << "Healthy: " << census[0] << "\n";
-    std::cout << "Sick:    " << census[1] << "\n";
-    std::cout << "Healed:  " << census[2] << "\n";
-    std::cout << "Dead:    " << census[3] << "\n";
+    if (printFlag == 1) {
+        std::cout << "Healthy: " << census[0] << "\n";
+        std::cout << "Sick:    " << census[1] << "\n";
+        std::cout << "Healed:  " << census[2] << "\n";
+        std::cout << "Dead:    " << census[3] << "\n";
+    }
     
 }
 
@@ -139,7 +126,7 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
         
     }
     
-    // Print the people to switch
+// Print the people to switch
 //    for (int i = 0; i < numberToShuffle; i++) {
 //        for (int j = 0; j < 2; j++) {
 //            std::cout << switchVector[i][j] << " ";
@@ -206,12 +193,9 @@ void spreadInfection(int * positionReference, Person Group[], int Length, int Wi
         }
     }
     
-    // Display the status
+    // Display the status each cycle
     //displayGroup(Group, Length, Width, 1);
 }
-
-
-
 
 
 
