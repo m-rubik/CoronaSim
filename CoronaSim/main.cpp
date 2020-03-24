@@ -35,11 +35,14 @@ int main(int argc, const char * argv[]) {
         }
     }
     
+    // Create history of Healthy, Sick, Healed and Dead people
+    int censusHistory[noCycles][4];
+    
     
     
     
     // Infect a random person
-    srand(time_t(NULL)); //time(NULL)
+    srand((unsigned int) time(NULL)); //time(NULL)
     int vector = rand() % (Length*Width);
     Group[vector].infect();
     
@@ -49,6 +52,9 @@ int main(int argc, const char * argv[]) {
     // Infect surrounding people
     for (int i = 0; i < noCycles; i++) {
         spreadInfection((int*)positionReference, Group, Length, Width, contagionFactor);
+        
+        displayGroup(Group, Length, Width, 1);
+        
         shuffleGroup(noSwitches, Group, Length, Width);
     }
     

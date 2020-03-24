@@ -40,12 +40,12 @@ public:
     
     void heal() {
         // Set status of person to Healed
-        status = "Healed";
+        status = "-";
     }
     
     void Die() {
         //Set the status of person to Dead
-        status = "Dead";
+        status = " ";
     }
     
     
@@ -69,18 +69,25 @@ void displayGroup (Person Group[], int Length, int Width, int flag) {
     std::cout << "\n";
     
     // Display the current Healthy and Sick Count
+    int healthyCount = 0;
     int sickCount = 0;
+    int healedCount = 0;
+    int deadCount = 0;
     if (flag == 1) {
         for (int i = 0; i < Length; i++) {
             for (int j = 0; j < Width; j++) {
+                if (Group[Length*i + j].status == ".") {healthyCount++;}
                 if (Group[Length*i + j].status == "+") {sickCount++;}
+                if (Group[Length*i + j].status == "-") {healedCount++;}
+                if (Group[Length*i + j].status == " ") {deadCount++;}
             }
         }
         
     }
-    std::cout << "Healthy: " << (Length*Width - sickCount) << "\n";
+    std::cout << "Healthy: " << healthyCount << "\n";
     std::cout << "Sick:    " << sickCount << "\n";
-    
+    std::cout << "Healed: " << healedCount << "\n";
+    std::cout << "Dead:    " << deadCount << "\n";
     
 }
 
@@ -181,7 +188,7 @@ void spreadInfection(int * positionReference, Person Group[], int Length, int Wi
     }
     
     // Display the status
-    displayGroup(Group, Length, Width, 1);
+    //displayGroup(Group, Length, Width, 1);
 }
 
 
