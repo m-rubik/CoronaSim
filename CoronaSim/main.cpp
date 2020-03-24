@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
     const int Length = 30;
     const int Width = 30;
     double contagionFactor = 0.25;
+    int noSwitches = 4;
     int noCycles = 40;
     
     // Create the 1D array of people
@@ -38,7 +39,7 @@ int main(int argc, const char * argv[]) {
     
     
     // Infect a random person
-    srand(time(NULL)); //time(NULL)
+    srand(time_t(NULL)); //time(NULL)
     int vector = rand() % (Length*Width);
     Group[vector].infect();
     
@@ -48,22 +49,10 @@ int main(int argc, const char * argv[]) {
     // Infect surrounding people
     for (int i = 0; i < noCycles; i++) {
         spreadInfection((int*)positionReference, Group, Length, Width, contagionFactor);
-        shuffleGroup(4, Group, Length, Width);
+        shuffleGroup(noSwitches, Group, Length, Width);
     }
     
     return 0;
 }
-
-
-// Create temp array
-// if person is sick then mark i,j as 1 on temp array
-// Generate the proximity array to infect
-// Apply the proximity array to the temp array
-// Continue
-// At end of whole loop, cycle through temp array and make i,j people sick
-
-
-// Why are all of these random people getting sick????
-
 
 

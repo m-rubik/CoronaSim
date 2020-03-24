@@ -88,10 +88,6 @@ void displayGroup (Person Group[], int Length, int Width, int flag) {
 
 // Shuffle a random group of people
 void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
-    // Shuffle the number of people inputted, the number inputted is the number of pairs
-    // Have to make sure that all vectors are unique
-    
-    // Input the number of switches that should happen per cycle, the Group/Length/width,
     
     //Initialization
     int switchVector[48][2];
@@ -117,6 +113,7 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
         
     }
     
+    // Print the people to switch
 //    for (int i = 0; i < numberToShuffle; i++) {
 //        for (int j = 0; j < 2; j++) {
 //            std::cout << switchVector[i][j] << " ";
@@ -186,19 +183,6 @@ void spreadInfection(int * positionReference, Person Group[], int Length, int Wi
     // Display the status
     displayGroup(Group, Length, Width, 1);
 }
-
-
-
-
-
-
-// I can pass an array to the function and then change the original array
-// int * positionReference in declaration and (int*)positionReference in call
-
-// i can call the values of an array in the function
-// *(positionReference + 2*Length + 3)
-
-// Should I be using std::vector?
 
 
 
