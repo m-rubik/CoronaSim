@@ -19,7 +19,7 @@ int main(int argc, const char * argv[]) {
     const int Width = 30;
     double contagionFactor = 0.25;
     int noSwitches = 4;
-    int noCycles = 40;
+    const int noCycles = 40;
     
     // Create the 1D array of people
     Person Group[Length*Width];
@@ -36,7 +36,7 @@ int main(int argc, const char * argv[]) {
     }
     
     // Create history of Healthy, Sick, Healed and Dead people
-    int censusHistory[noCycles][4];
+    int censusHistory[noCycles][4] = {0};
 //    int jk = 0;
 //    census((int*) censusHistory[jk], Group, Length, Width);
 //
@@ -61,6 +61,9 @@ int main(int argc, const char * argv[]) {
         
         shuffleGroup(noSwitches, Group, Length, Width);
     }
+    
+    
+    
     
     return 0;
 }
