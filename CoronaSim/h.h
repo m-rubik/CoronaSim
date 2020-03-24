@@ -69,25 +69,44 @@ void displayGroup (Person Group[], int Length, int Width, int flag) {
     std::cout << "\n";
     
     // Display the current Healthy and Sick Count
-    int healthyCount = 0;
-    int sickCount = 0;
-    int healedCount = 0;
-    int deadCount = 0;
-    if (flag == 1) {
-        for (int i = 0; i < Length; i++) {
-            for (int j = 0; j < Width; j++) {
-                if (Group[Length*i + j].status == ".") {healthyCount++;}
-                if (Group[Length*i + j].status == "+") {sickCount++;}
-                if (Group[Length*i + j].status == "-") {healedCount++;}
-                if (Group[Length*i + j].status == " ") {deadCount++;}
-            }
+//    int healthyCount = 0;
+//    int sickCount = 0;
+//    int healedCount = 0;
+//    int deadCount = 0;
+//    if (flag == 1) {
+//        for (int i = 0; i < Length; i++) {
+//            for (int j = 0; j < Width; j++) {
+//                if (Group[Length*i + j].status == ".") {healthyCount++;}
+//                if (Group[Length*i + j].status == "+") {sickCount++;}
+//                if (Group[Length*i + j].status == "-") {healedCount++;}
+//                if (Group[Length*i + j].status == " ") {deadCount++;}
+//            }
+//        }
+//
+//    }
+//    std::cout << "Healthy: " << healthyCount << "\n";
+//    std::cout << "Sick:    " << sickCount << "\n";
+//    std::cout << "Healed: " << healedCount << "\n";
+//    std::cout << "Dead:    " << deadCount << "\n";
+    
+}
+
+void census(int * census, Person Group[], int Length, int Width) {
+    
+    
+    for (int i = 0; i < Length; i++) {
+        for (int j = 0; j < Width; j++) {
+            if (Group[Length*i + j].status == ".") {census[0]++;}
+            if (Group[Length*i + j].status == "+") {census[1]++;}
+            if (Group[Length*i + j].status == "-") {census[2]++;}
+            if (Group[Length*i + j].status == " ") {census[3]++;}
         }
-        
     }
-    std::cout << "Healthy: " << healthyCount << "\n";
-    std::cout << "Sick:    " << sickCount << "\n";
-    std::cout << "Healed: " << healedCount << "\n";
-    std::cout << "Dead:    " << deadCount << "\n";
+    
+    std::cout << "Healthy: " << census[0] << "\n";
+    std::cout << "Sick:    " << census[1] << "\n";
+    std::cout << "Healed:  " << census[2] << "\n";
+    std::cout << "Dead:    " << census[3] << "\n";
     
 }
 

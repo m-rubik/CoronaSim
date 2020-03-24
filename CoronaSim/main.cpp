@@ -37,8 +37,10 @@ int main(int argc, const char * argv[]) {
     
     // Create history of Healthy, Sick, Healed and Dead people
     int censusHistory[noCycles][4];
-    
-    
+//    int jk = 0;
+//    census((int*) censusHistory[jk], Group, Length, Width);
+//
+//    std::cout << censusHistory[jk][0] << censusHistory[jk][1] << censusHistory[jk][2] << censusHistory[jk][3] << "\n";
     
     
     // Infect a random person
@@ -53,7 +55,9 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < noCycles; i++) {
         spreadInfection((int*)positionReference, Group, Length, Width, contagionFactor);
         
-        displayGroup(Group, Length, Width, 1);
+        displayGroup(Group, Length, Width, 0);
+        
+        census((int*) censusHistory[i], Group, Length, Width);
         
         shuffleGroup(noSwitches, Group, Length, Width);
     }
