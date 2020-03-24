@@ -59,6 +59,8 @@ int main(int argc, const char * argv[]) {
         
         census((int*) censusHistory[i], Group, Length, Width);
         
+        std::cout << censusHistory[i][0] << " " << censusHistory[i][1] << " " << censusHistory[i][2] << " " << censusHistory[i][3] << "\n";
+        
         shuffleGroup(noSwitches, Group, Length, Width);
     }
     
