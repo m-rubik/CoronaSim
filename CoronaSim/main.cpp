@@ -15,8 +15,9 @@
 int main(int argc, const char * argv[]) {
     
     // Set number of people
-    const int Length = 5;
-    const int Width = 5;
+    const int Length = 10;
+    const int Width = 10;
+    
     srand(5); //time(NULL)
     
     // Create the 1D array of people
@@ -24,16 +25,11 @@ int main(int argc, const char * argv[]) {
     
     // Create the position vector and assign their indexes
     int positionReference[Length][Width];
-    
-    
-    
-    
-    
 
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
             // Set initial positions
-            positionReference[i][j] = 5*i + j;
+            positionReference[i][j] = Length*i + j;
         }
     }
     
@@ -46,53 +42,63 @@ int main(int argc, const char * argv[]) {
 //    }
     
     
-    
-    int test1 = 0;
-    test1 = spreadInfection((int*)positionReference, Group, Length, Width);
-    std::cout << test1 << "\n";
-    std::cout << positionReference[1][3] << "\n";
+
     
     
     // Infect a random person
     int vector = rand() % (Length*Width);
     //std::cout << vector << "\n";
-    vector = 24;
+    vector = 12;
     Group[vector].infect();
-
+    
+    
+    displayGroup(Group, Length, Width);
     
 
-    for (int i = 0; i < Length; i++) {
-        std::cout << Group[5*i].status << Group[5*i + 1].status << Group[5*i + 2].status << Group[5*i + 3].status << Group[5*i + 4].status << "\n";
-    }
-    std::cout << "\n";
+    
+    
+    
+    
+//    for (int i = 0; i < Length; i++) {
+//        std::cout << Group[length*i].status << Group[5*i + 1].status << Group[5*i + 2].status << Group[5*i + 3].status << Group[5*i + 4].status << "\n";
+//    }
+//    std::cout << "\n\n";
     
     
     
     //Create temporary array to keep track of who to make sick
-    int tempSick [Length][Width] = {0};
+//    int tempSick [Length][Width] = {0};
     
-    // Loop through people and find out who to make sick
-    for (int i = 0; i < Length; i++) {
-        
-        for (int j = 0; j < Width; j++) {
-            
-            // If the person associated with array point is sick then infect around
-            if (Group[positionReference[i][j]].status == "S") {
-                
-                // Create the array of people to infect
-                int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width, j + 1)} };
-                
-                // Assign 1 to the tempSick array that have to be infected
-                for (int k = 0; k < 4; k++) {
-                    //std::cout << target[k][0] << " " << target[k][1] << "\n"; // Visualize the points to change
-                    tempSick[target[k][0]][target[k][1]] = 1;
-                }
-                
-            }
-            
-        }
-        
-    }
+    
+    spreadInfection((int*)positionReference, Group, Length, Width);
+    
+
+    
+    spreadInfection((int*)positionReference, Group, Length, Width);
+    
+    
+//    // Loop through people and find out who to make sick
+//    for (int i = 0; i < Length; i++) {
+//
+//        for (int j = 0; j < Width; j++) {
+//
+//            // If the person associated with array point is sick then infect around
+//            if (Group[positionReference[i][j]].status == "S") {
+//
+//                // Create the array of people to infect
+//                int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width, j + 1)} };
+//
+//                // Assign 1 to the tempSick array that have to be infected
+//                for (int k = 0; k < 4; k++) {
+//                    //std::cout << target[k][0] << " " << target[k][1] << "\n"; // Visualize the points to change
+//                    tempSick[target[k][0]][target[k][1]] = 1;
+//                }
+//
+//            }
+//
+//        }
+//
+//    }
     
     
     
@@ -102,20 +108,14 @@ int main(int argc, const char * argv[]) {
 //    }
     
     // Apply the tempSick array to the group
-    for (int i = 0; i < Length; i++) {
-        for (int j = 0; j < Width; j++) {
-            // Make individual people sick
-            if (tempSick[i][j] == 1) {
-                Group[5*i + j].infect();
-            }
-        }
-    }
-    
-    // Visualize the actual sick people
-    for (int i = 0; i < Length; i++) {
-        std::cout << Group[5*i].status << Group[5*i + 1].status << Group[5*i + 2].status << Group[5*i + 3].status << Group[5*i + 4].status << "\n";
-    }
-    
+//    for (int i = 0; i < Length; i++) {
+//        for (int j = 0; j < Width; j++) {
+//            // Make individual people sick
+//            if (tempSick[i][j] == 1) {
+//                Group[5*i + j].infect();
+//            }
+//        }
+//    }
     
     return 0;
 }
