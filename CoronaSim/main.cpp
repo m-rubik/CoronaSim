@@ -14,18 +14,19 @@
 
 int main(int argc, const char * argv[]) {
     
-    // Set number of people
-    const int Length = 10;
-    const int Width = 10;
-    
-    srand(5); //time(NULL)
+    // Set number of people, limited to 100x100 for now, can change in spreadInfection
+    const int Length = 30;
+    const int Width = 30;
+    double contagionFactor = 0.25;
+    int noCycles = 40;
     
     // Create the 1D array of people
     Person Group[Length*Width];
     
-    // Create the position vector and assign their indexes
+    // Create the position vector
     int positionReference[Length][Width];
 
+    // Assign Indices to the positionReference array
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
             // Set initial positions
@@ -33,89 +34,22 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-//    // Test the indices of the positionReference
-//    for (int i = 0; i < Length; i++) {
-//        for (int j = 0; j < Width; j++) {
-//            // Set initial positions
-//            std::cout << positionReference[i][j] << "\n";
-//        }
-//    }
     
-    
-
     
     
     // Infect a random person
+    srand(time(NULL)); //time(NULL)
     int vector = rand() % (Length*Width);
-    //std::cout << vector << "\n";
-    vector = 12;
     Group[vector].infect();
     
+    // Display first infected person
+    displayGroup(Group, Length, Width, 1);
     
-    displayGroup(Group, Length, Width);
-    
-
-    
-    
-    
-    
-//    for (int i = 0; i < Length; i++) {
-//        std::cout << Group[length*i].status << Group[5*i + 1].status << Group[5*i + 2].status << Group[5*i + 3].status << Group[5*i + 4].status << "\n";
-//    }
-//    std::cout << "\n\n";
-    
-    
-    
-    //Create temporary array to keep track of who to make sick
-//    int tempSick [Length][Width] = {0};
-    
-    
-    spreadInfection((int*)positionReference, Group, Length, Width);
-    
-
-    
-    spreadInfection((int*)positionReference, Group, Length, Width);
-    
-    
-//    // Loop through people and find out who to make sick
-//    for (int i = 0; i < Length; i++) {
-//
-//        for (int j = 0; j < Width; j++) {
-//
-//            // If the person associated with array point is sick then infect around
-//            if (Group[positionReference[i][j]].status == "S") {
-//
-//                // Create the array of people to infect
-//                int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width, j + 1)} };
-//
-//                // Assign 1 to the tempSick array that have to be infected
-//                for (int k = 0; k < 4; k++) {
-//                    //std::cout << target[k][0] << " " << target[k][1] << "\n"; // Visualize the points to change
-//                    tempSick[target[k][0]][target[k][1]] = 1;
-//                }
-//
-//            }
-//
-//        }
-//
-//    }
-    
-    
-    
-//    // Visualize tempSick Matrix
-//    for (int i = 0; i < Length; i++) {
-//        std::cout << tempSick[i][0] << tempSick[i][1] << tempSick[i][2] << tempSick[i][3] << tempSick[i][4] << "\n";
-//    }
-    
-    // Apply the tempSick array to the group
-//    for (int i = 0; i < Length; i++) {
-//        for (int j = 0; j < Width; j++) {
-//            // Make individual people sick
-//            if (tempSick[i][j] == 1) {
-//                Group[5*i + j].infect();
-//            }
-//        }
-//    }
+    // Infect surrounding people
+    for (int i = 0; i < noCycles; i++) {
+        spreadInfection((int*)positionReference, Group, Length, Width, contagionFactor);
+        shuffleGroup(4, Group, Length, Width);
+    }
     
     return 0;
 }
