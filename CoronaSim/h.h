@@ -144,9 +144,6 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
         Group[switchVector[i][1]].status = tempStatus;
         
     }
-    
-    
-    
 }
 
 
@@ -198,6 +195,23 @@ void spreadInfection(int * positionReference, Person Group[], int Length, int Wi
 }
 
 
+// Print the History of the simulations
+void printCensusHistory(int * censusHistory, int Length, int Width) {
+    
+    std::cout << "Round\tH\tS\tD\tH\n";
+    
+    for (int i = 0; i < Length*Width; i++) {
+        for (int j = 0; j < 1; j++) {
+            std::cout << censusHistory[i];
+            
+        }
+        
+        std::cout << "\n";
+    }
+    
+    
+    
+}
 
 
 

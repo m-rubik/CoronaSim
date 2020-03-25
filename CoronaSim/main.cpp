@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include "h.h"
 
@@ -63,6 +64,20 @@ int main(int argc, const char * argv[]) {
         
         shuffleGroup(noSwitches, Group, Length, Width);
     }
+    
+    //printCensusHistory((int *)censusHistory, Length, Width);
+    
+    std::cout << "Round\t\tH\t\tS\t\tD\t\tH\n\t\t\t";
+    
+    for (int i = 0; i < noCycles; i++) {
+        for (int j = 0; j < 4; j++) {
+            std::cout << censusHistory[i][j] << "\t\t";
+            
+        }
+        
+        std::cout << "\n\t\t\t";
+    }
+    
     
     
     
