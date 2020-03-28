@@ -13,11 +13,12 @@ class Person {
 public:
     // Is the person infected
     std::string status = ".";
-    // Has the person been infected and then healed
     
+    // Is the person immune
+    bool immune = 0;
     
     // Unit time that the person has been infected
-    int sicktime = 0;
+    int sickTime = 0;
     
     // Position of the person
     int position[2];
@@ -31,17 +32,22 @@ public:
     bool infect() {
         // Set status of person to Sick
         bool x = 0;
-        if (status == ".") {x = 1;}
-        
-        status = "+";
+        // If the person is healthy and not immune then infect and return that they were infected
+        if (status == "." && immune == 0) {
+            x = 1;
+            status = "+";
+        }
         
         return x;
     }
     
-    void heal() {
-        // Set status of person to Healed
+    
+    void unconditionalHeal(bool makeImmune) {
+        // Set status of person to Healed unconditionally
         status = "-";
+        if (makeImmune) {immune = 1;};
     }
+    
     
     void Die() {
         //Set the status of person to Dead
@@ -54,6 +60,27 @@ public:
         position[0] = x;
         position[1] = y;
     }
+    
+    
+    void cycle() {
+        // Age the person and their sick period by a day if they are already sick
+        if (status == "+") {
+            sickTime++;
+        }
+    }
+    
+    
+    void healTest(int incubationLifetime, double deathRate, bool makeImmune) {
+        // Check if the person has gone through the whole incubation period
+        if ((sickTime > incubationLifetime) && (status == "+") && (((double) rand() / (RAND_MAX)) < (1 - deathRate))) {
+            status = "-";
+            if (makeImmune) {immune = 1;}; // Conditionally make immune
+        } else if ((sickTime > incubationLifetime) && (status == "+")) {
+            status = " ";
+        }
+        
+    }
+    
     
 };
 
@@ -92,7 +119,7 @@ void census(int * census, Person Group[], int Length, int Width, int printFlag) 
         std::cout << "Healthy: " << census[0] << "\n";
         std::cout << "Sick:    " << census[1] << "\n";
         std::cout << "Healed:  " << census[2] << "\n";
-        std::cout << "Dead:    " << census[3] << "\n";
+        std::cout << "Dead:    " << census[3] << "\n\n";
     }
     
 }
@@ -139,10 +166,11 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
     
     for (int i = 0; i < numberToShuffle; i++) {
         
-        tempStatus = Group[switchVector[i][0]].status;
-        Group[switchVector[i][0]].status = Group[switchVector[i][1]].status;
-        Group[switchVector[i][1]].status = tempStatus;
-        
+        if ((Group[switchVector[i][0]].status != " ") && (Group[switchVector[i][1]].status != " ")) {
+            tempStatus = Group[switchVector[i][0]].status;
+            Group[switchVector[i][0]].status = Group[switchVector[i][1]].status;
+            Group[switchVector[i][1]].status = tempStatus;
+        }
     }
 }
 
@@ -196,6 +224,7 @@ void spreadInfection(int * positionReference, Person Group[], int Length, int Wi
 
 
 // Print the History of the simulations
+// This does not work
 void printCensusHistory(int * censusHistory, int Length, int Width) {
     
     std::cout << "Round\tH\tS\tD\tH\n";
@@ -212,6 +241,22 @@ void printCensusHistory(int * censusHistory, int Length, int Width) {
     
     
 }
+
+void cycleSickTimeline(Person Group[], int Length, int Width, bool makeImmune) {
+    // Cycle the Timeline for person
+    for (int i = 0; i < Length*Width; i++) {
+        Group[i].cycle();
+    }
+}
+
+void testSickTimeline(Person Group[], int Length, int Width, int incubationLifetime, double deathRate, bool makeImmune) {
+    // Test if people have been long enough to become healed
+    for (int i = 0; i < Length*Width; i++) {
+        Group[i].healTest(incubationLifetime, deathRate, makeImmune);
+    }
+    
+}
+
 
 
 

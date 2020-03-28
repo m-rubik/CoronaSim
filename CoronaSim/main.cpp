@@ -18,9 +18,11 @@ int main(int argc, const char * argv[]) {
     // Set number of people, limited to 100x100 for now, can change in spreadInfection
     const int Length = 30;
     const int Width = 30;
-    double contagionFactor = 0.25;
-    int noSwitches = 4;
-    const int noCycles = 40;
+    double contagionFactor = 0.25;     // How contagious it is, higher is more contagious
+    int noSwitches = 10;               // How many pairs to switch
+    const int noCycles = 100;          // Number of simulation cycles
+    int incubationLifetime = 3;        // How long people are sick and contagious
+    double deathRate = 0.2;            // How deadly it is, higher is deadlier
     
     // Create the 1D array of people
     Person Group[Length*Width];
@@ -56,26 +58,25 @@ int main(int argc, const char * argv[]) {
         
         displayGroup(Group, Length, Width);
         
-        census((int*) censusHistory[i], Group, Length, Width, 1);
-        
-        
-        // Test print of censusHistory
-        std::cout << censusHistory[i][0] << " " << censusHistory[i][1] << " " << censusHistory[i][2] << " " << censusHistory[i][3] << "\n";
+        census((int*) censusHistory[i], Group, Length, Width, 1); // Set 0 for no print
         
         shuffleGroup(noSwitches, Group, Length, Width);
+        
+        cycleSickTimeline(Group, Length, Width, 1);
+        testSickTimeline(Group, Length, Width, incubationLifetime, deathRate, 1);
     }
     
     //printCensusHistory((int *)censusHistory, Length, Width);
-    
-    std::cout << "Round\t\tH\t\tS\t\tD\t\tH\n\t\t\t";
+    std::cout << "Round\tH\t\tS\t\tH\t\tD\n";
     
     for (int i = 0; i < noCycles; i++) {
+        std::cout << i << "\t\t";
         for (int j = 0; j < 4; j++) {
             std::cout << censusHistory[i][j] << "\t\t";
             
         }
         
-        std::cout << "\n\t\t\t";
+        std::cout << "\n";
     }
     
     
