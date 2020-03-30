@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     const int Width = 100;
     double contagionFactor = 0.25;     // How contagious it is, higher is more contagious
     int noSwitches = 50;               // How many pairs to switch
-    const int noCycles = 200;          // Number of simulation cycles
+    const int noCycles = 100;          // Number of simulation cycles
     int incubationLifetime = 3;        // How long people are sick and contagious
     double deathRate = 0.2;            // How deadly it is, higher is deadlier
     
@@ -67,12 +67,12 @@ int main(int argc, const char * argv[]) {
     }
     
     //printCensusHistory((int *)censusHistory, Length, Width);
-    std::cout << "Round\tH\t\tS\t\tH\t\tD\n";
-    
+    std::cout << "Round\t\tH\t\t\tS\t\t\tH\t\t\tD\n";
+    //std::cout << std::setw(6);
     for (int i = 0; i < noCycles; i++) {
-        std::cout << i << "\t\t";
+        std::cout << std::setw(3) << i << "\t\t";
         for (int j = 0; j < 4; j++) {
-            std::cout << censusHistory[i][j] << "\t\t";
+            std::cout << std::setw(5) <<  censusHistory[i][j] << "\t\t";
             
         }
         

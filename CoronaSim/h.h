@@ -179,7 +179,7 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
 void spreadInfection(int * positionReference, Person Group[], int Length, int Width, double contagionFactor) {
     
     // Create array to keep track of who to make sick
-    int tempSick [100][100] = {0};
+    int tempSick [101][101] = {0};
     
     // Loop through people and find out who to make sick
     for (int i = 0; i < Length; i++) {
