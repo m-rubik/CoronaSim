@@ -238,8 +238,6 @@ void printCensusHistory(int * censusHistory, int Length, int Width) {
         std::cout << "\n";
     }
     
-    
-    
 }
 
 void cycleSickTimeline(Person Group[], int Length, int Width, bool makeImmune) {
