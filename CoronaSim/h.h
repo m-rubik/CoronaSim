@@ -20,13 +20,12 @@ public:
     // Unit time that the person has been infected
     int sickTime = 0;
     
-    // Position of the person
+    // Position of the person, this is not currently being used
     int position[2];
     
     // Which group is the person in
     int group;
     
-    Person() {}
     
     
     bool infect() {
@@ -130,9 +129,9 @@ void census(int * census, Person Group[], int Length, int Width, int printFlag) 
 void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
     
     //Initialization
-    int switchVector[48][2];
+    int switchVector[100][2];
     int poolSize = Length*Width;
-    unsigned char is_used[1000] = {0}; // Flag
+    unsigned char is_used[10001] = {0}; // Flag
     int in;
     int im = 0;
     

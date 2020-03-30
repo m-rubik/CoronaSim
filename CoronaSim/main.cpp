@@ -15,11 +15,11 @@
 
 int main(int argc, const char * argv[]) {
     
-    // Set number of people, limited to 100x100 for now, can change in spreadInfection
-    const int Length = 30;
-    const int Width = 30;
+    // Set number of people, limited to 100x100 in spreadInfection and 10000 in shuffleGroup, can change in spreadInfection
+    const int Length = 100;
+    const int Width = 100;
     double contagionFactor = 0.25;     // How contagious it is, higher is more contagious
-    int noSwitches = 10;               // How many pairs to switch
+    int noSwitches = 50;               // How many pairs to switch
     const int noCycles = 100;          // Number of simulation cycles
     int incubationLifetime = 3;        // How long people are sick and contagious
     double deathRate = 0.2;            // How deadly it is, higher is deadlier
