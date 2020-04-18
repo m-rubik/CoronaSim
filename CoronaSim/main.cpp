@@ -10,19 +10,20 @@
 #include <fstream>
 #include <vector>
 #include "h.h"
+#include <time.h>
 
 
 
 int main(int argc, const char * argv[]) {
     
     // Set number of people, limited to 100x100 in spreadInfection and 10000 in shuffleGroup, can change in spreadInfection
-    const int Length = 100;
-    const int Width = 100;
-    double contagionFactor = 0.25;     // How contagious it is, higher is more contagious
+    const int Length = 40;
+    const int Width = 40;
+    double contagionFactor = 0.15;     // How contagious it is, higher is more contagious
     int noSwitches = 50;               // How many pairs to switch
     const int noCycles = 100;          // Number of simulation cycles
-    int incubationLifetime = 3;        // How long people are sick and contagious
-    double deathRate = 0.2;            // How deadly it is, higher is deadlier
+    int incubationLifetime = 5;        // How long people are sick and contagious
+    double deathRate = 0.3;            // How deadly it is, higher is deadlier
     
     // Create the 1D array of people
     Person Group[Length*Width];
@@ -79,8 +80,22 @@ int main(int argc, const char * argv[]) {
         std::cout << "\n";
     }
     
-    
-    
+    // Print data to file for plotting in Matlab
+    time_t curtime;
+    time(&curtime);
+    std::fstream outfile("coronaResults.txt", std::fstream::out);
+    outfile << "Data File for Simulation Results" << std::endl;
+    outfile << "Test Time: " << ctime(&curtime);
+    outfile << "---Parameters---" << std::endl << Length*Width << "\n"  << noCycles << "\n"  << noSwitches << "\n"  << incubationLifetime << "\n"  << contagionFactor << "\n"  << deathRate << std::endl << std::endl;
+    outfile << "Round Healthy Sick Healed Dead" << std::endl;
+    for (int i = 0; i < noCycles; i++) {
+        outfile << i << " ";
+        for (int j = 0; j < 4; j++) {
+            outfile << censusHistory[i][j] << " ";
+        }
+        outfile << "\n";
+    }
+    outfile.close();
     
     
     return 0;

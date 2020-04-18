@@ -256,5 +256,4 @@ void testSickTimeline(Person Group[], int Length, int Width, int incubationLifet
 
 
 
-
 #endif /* h_h */
