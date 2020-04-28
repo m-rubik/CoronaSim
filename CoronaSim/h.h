@@ -26,8 +26,6 @@ public:
     // Which group is the person in
     int group;
     
-    
-    
     bool infect() {
         // Set status of person to Sick
         bool x = 0;
@@ -126,7 +124,7 @@ void census(int * census, Person Group[], int Length, int Width, int printFlag) 
 
 
 // Shuffle a random group of people
-void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
+void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
     
     //Initialization
     int switchVector[100][2];
@@ -164,7 +162,6 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
     std::string tempStatus;
     
     for (int i = 0; i < numberToShuffle; i++) {
-        
         if ((Group[switchVector[i][0]].status != " ") && (Group[switchVector[i][1]].status != " ")) {
             tempStatus = Group[switchVector[i][0]].status;
             Group[switchVector[i][0]].status = Group[switchVector[i][1]].status;
@@ -176,7 +173,7 @@ void shuffleGroup(int numberToShuffle, Person Group[], int Length, int Width) {
 
 
 // Spread the virus to the immediately adjacent people
-void spreadInfection(int * positionReference, Person Group[], int Length, int Width, double contagionFactor) {
+void spreadInfection(int ** positionReference, Person Group[], int Length, int Width, double contagionFactor) {
     
     // Create array to keep track of who to make sick
     int tempSick [101][101] = {0};
@@ -185,10 +182,10 @@ void spreadInfection(int * positionReference, Person Group[], int Length, int Wi
     for (int i = 0; i < Length; i++) {
         
         for (int j = 0; j < Width; j++) {
-            
+
             // If the person associated with array point is sick then infect around
-            if (Group[*(positionReference + i*Length + j)].status == "+") {
-                
+            if (Group[(**positionReference + i*Length + j)].status == "+") {
+
                 // Create the array of people to infect
                 int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width, j + 1)} };
                 
