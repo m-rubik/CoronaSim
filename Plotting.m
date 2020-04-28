@@ -2,7 +2,7 @@ clear;
 clc;
 
 % Open, read and close file
-dataFile = fopen('/Users/lucasnwnht/LearningC++/CoronaSim/coronaResults.txt', 'r');
+dataFile = fopen('./CoronaSim/coronaResults.txt', 'r');
 fgets(dataFile);
 
 timeData = fgets(dataFile);

@@ -7,30 +7,60 @@
 //
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
-#include "h.h"
 #include <time.h>
+#include <algorithm>
+#include <string>
+#include <string.h>
+#include "h.h"
+
+// Declare all defaults. These will get overriden by the command line arguments
+int Length = 40;                  // Population grid length
+int Width = 40;                   // Population grid width
+int noCycles = 60;                // Number of simulation cycles
+double contagionFactor = 0.4;     // How contagious it is, higher is more contagious
+int noSwitches = 10;              // How many pairs to switch
+int incubationLifetime = 5;       // How long people are sick and contagious
+double deathRate = 0.3;           // How deadly it is, higher is deadlier
+bool visualize = false;            // Display a visualization of the simulation
+bool printCensus = false;         // Display census updates throughout simulation
 
 
+static void show_usage(std::string name) {
+    std::cerr << "Usage:\n"
+              << "\t-h,--help\t\tShow this help message\n"
+              << "\t-l,--length\tPopulation grid length\n"
+              << "\t-w,--width\tPopulation grid width\n"
+              << "\t-e,--noCycles\tNumber of time cycles (epochs) to run\n"
+              << "\t-c,--contagionFactor\tHow contagious it is, higher is more contagious\n"
+              << "\t-s,--noSwitches\tHow many pairs to switch\n"
+              << "\t-i,--incubationLifetime\tHow long people are sick and contagious\n"
+              << "\t-d,--deathRate\tHow deadly it is, higher is deadlier\n"
+              << "\t-v,--visualize\tDisplay a visualization of the simulation\n"
+              << "\t-p,--printCensus\tDisplay census updates throughout simulation\n"
+              << std::endl;
+}
 
-int main(int argc, const char * argv[]) {
+static int runSimulation() {
+    std::cout << "Running with parameters:\n"
+              << "length: " << Length << std::endl
+              << "width: " << Width << std::endl
+              << "number of cycles: " << noCycles << std::endl
+              << "number of switches: " << noSwitches << std::endl
+              << "contagion factor: " << contagionFactor << std::endl
+              << "incubation lifetime: " << incubationLifetime << std::endl
+              << "death rate: " << deathRate << std::endl;
+
+    // Dynamically create the 1D array of people
+    Person *Group{new Person[Length*Width]{} };
     
-    // Set number of people, limited to 100x100 in spreadInfection and 10000 in shuffleGroup, can change in spreadInfection
-    const int Length = 40;
-    const int Width = 40;
-    double contagionFactor = 0.4;     // How contagious it is, higher is more contagious
-    int noSwitches = 10;                // How many pairs to switch
-    const int noCycles = 60;          // Number of simulation cycles
-    int incubationLifetime = 5;        // How long people are sick and contagious
-    double deathRate = 0.3;            // How deadly it is, higher is deadlier
-    
-    // Create the 1D array of people
-    Person Group[Length*Width];
-    
-    // Create the position vector
-    int positionReference[Length][Width];
-
+    // Dynamically create the position vector
+    int **positionReference = new int*[Length];
+    for(int i = 0; i < Length; ++i) {
+        positionReference[i] = new int[Width];
+    }
     // Assign Indices to the positionReference array
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
@@ -40,9 +70,17 @@ int main(int argc, const char * argv[]) {
     }
     
     // Create history of Healthy, Sick, Healed and Dead people
-    int censusHistory[noCycles][4] = {0};
-    // int censusHistory[4][noCycles] = {0};  //This could be more helpful for plotting
-    
+    int **censusHistory = new int*[noCycles];
+    for(int i = 0; i < noCycles; ++i) {
+        censusHistory[i] = new int[4];
+    }
+    // Assign Indices to the censusHistory array
+    for (int i = 0; i < noCycles; i++) {
+        for (int j = 0; j < 4; j++) {
+            // Set initial positions
+            censusHistory[i][j] = noCycles*i + j;
+        }
+    }
     
     // Infect a random person
     srand((unsigned int) time(NULL)); //time(NULL)
@@ -50,33 +88,33 @@ int main(int argc, const char * argv[]) {
     Group[vector].infect();
     
     // Display first infected person
-    displayGroup(Group, Length, Width);
-    census((int*) censusHistory[0], Group, Length, Width, 1);
+    if (visualize) {
+        displayGroup(Group, Length, Width);
+    }
+    census((int*) censusHistory[0], Group, Length, Width, printCensus);
     
     // Infect surrounding people
     for (int i = 0; i < noCycles; i++) {
-        spreadInfection((int*)positionReference, Group, Length, Width, contagionFactor);
+        std::cout << "Running epoc h" << i << "..." << std::endl;
+        spreadInfection(positionReference, Group, Length, Width, contagionFactor);
         
-        displayGroup(Group, Length, Width);
+        if (visualize) {
+            displayGroup(Group, Length, Width);
+        }
         
-        census((int*) censusHistory[i], Group, Length, Width, 1); // Set 0 for no print
-        
+        census((int*) censusHistory[i], Group, Length, Width, printCensus);
         shuffleGroup(noSwitches, Group, Length, Width);
-        
         cycleSickTimeline(Group, Length, Width, 1);
         testSickTimeline(Group, Length, Width, incubationLifetime, deathRate, 1);
     }
     
-    //printCensusHistory((int *)censusHistory, Length, Width);
     std::cout << "Round\t\tH\t\t\tS\t\t\tH\t\t\tD\n";
     //std::cout << std::setw(6);
     for (int i = 0; i < noCycles; i++) {
         std::cout << std::setw(3) << i << "\t\t";
         for (int j = 0; j < 4; j++) {
             std::cout << std::setw(5) <<  censusHistory[i][j] << "\t\t";
-            
         }
-        
         std::cout << "\n";
     }
     
@@ -96,9 +134,101 @@ int main(int argc, const char * argv[]) {
         outfile << "\n";
     }
     outfile.close();
-    
+
+    // Cleanup memory allocated for arrays
+    delete[] Group;
+
+    for(int i = 0; i < Length; ++i) {
+        delete [] positionReference[i];
+    }
+    delete [] positionReference;
+
+    for(int i = 0; i < noCycles; ++i) {
+        delete [] censusHistory[i];
+    }
+    delete [] censusHistory;
     
     return 0;
 }
 
+int main(int argc, const char* argv[]) {
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if ((arg == "-h") || (arg == "--help")) {
+            show_usage(argv[0]);
+            return 0;
+        }
+        else if ((arg == "-l") || (arg == "--length")) {
+            if (i + 1 < argc) {
+                Length = std::stoi(argv[++i]);
+            } else {
+                  std::cerr << "--length option requires one argument." << std::endl;
+                return 1;
+            }  
+        }
+        else if ((arg == "-w") || (arg == "--width")) {
+            if (i + 1 < argc) { // Make sure we aren't at the end of argv!
+                Width = std::stoi(argv[++i]);   
+            } else {
+                  std::cerr << "--width option requires one argument." << std::endl;
+                return 1;
+            }  
+        }
+        else if ((arg == "-e") || (arg == "--noCycles")) {
+            if (i + 1 < argc) {
+                noCycles = std::stoi(argv[++i]);
+            } else {
+                  std::cerr << "--noCycles option requires one argument." << std::endl;
+                return 1;
+            }  
+        } 
+        else if ((arg == "-c") || (arg == "--contagionFactor")) {
+            if (i + 1 < argc) {
+                contagionFactor = atof(argv[++i]);
+            } else {
+                  std::cerr << "--contagionFactor option requires one argument." << std::endl;
+                return 1;
+            }  
+        }
+        else if ((arg == "-s") || (arg == "--noSwitches")) {
+            if (i + 1 < argc) {
+                noSwitches = std::stoi(argv[++i]);
+            } else {
+                  std::cerr << "--noSwitches option requires one argument." << std::endl;
+                return 1;
+            }  
+        }
+        else if ((arg == "-i") || (arg == "--incubationLifetime")) {
+            if (i + 1 < argc) {
+                incubationLifetime = std::stoi(argv[++i]);
+            } else {
+                  std::cerr << "--incubationLifetime option requires one argument." << std::endl;
+                return 1;
+            }  
+        }
+        else if ((arg == "-d") || (arg == "--deathRate")) {
+            if (i + 1 < argc) {
+                deathRate = atof(argv[++i]);
+            } else {
+                  std::cerr << "--deathRate option requires one argument." << std::endl;
+                return 1;
+            }  
+        }
+        else if ((arg == "-v") || (arg == "--visualize")) {
+            visualize = true;
+        }
+        else if ((arg == "-p") || (arg == "--printCensus")) {
+            printCensus = true;
+        }
+        else {
+            std::cerr << "Unrecognized argument " << arg << std::endl;
+            // show_usage(argv[0]);
+            // return 0
+        }
+    }
+
+    int result = runSimulation();
+
+    return result;
+}
 
