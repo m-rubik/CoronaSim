@@ -24,8 +24,8 @@ public:
         // Randomly generated age of the person
         age = rand() % 100;
 
-        // 50% chance of having an underlying condition
-        underlyingCondition = rand() % 2;
+        // 5% chance of having an underlying condition
+        underlyingCondition = (rand() % 100) < 5;
 
         // Determine the death rate (based on data from the NYC outbreak)
         if (underlyingCondition){
@@ -176,7 +176,7 @@ void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
     
     //Initialization
     int **switchVector = new int*[numberToShuffle];
-    for (int i = 0; i < numberToShuffle; ++i) {
+    for (int i = 0; i < numberToShuffle; i++) {
         switchVector[i] = new int[2];
     }
     unsigned char *is_used = new unsigned char[Length*Width]; // Flag
@@ -201,18 +201,18 @@ void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
         
     }
     
-// Print the people to switch
-//    for (int i = 0; i < numberToShuffle; i++) {
-//        for (int j = 0; j < 2; j++) {
-//            std::cout << switchVector[i][j] << " ";
-//        }
-//        std::cout << "\n";
-//    }
+    // Print the people to switch
+    //    for (int i = 0; i < numberToShuffle; i++) {
+    //        for (int j = 0; j < 2; j++) {
+    //            std::cout << switchVector[i][j] << " ";
+    //        }
+    //        std::cout << "\n";
+    //    }
     
     // for each row in switchVector, temp = group(first index).status, group(first index).status = group(second index).status, then group(second).status = temp
     std::string tempStatus;
     
-    for (int i = 0; i < numberToShuffle; i++) {
+    for (int i = 0; i < numberToShuffle-1; i++) {
         if ((Group[switchVector[i][0]].getStatus() != " ") && (Group[switchVector[i][1]].getStatus() != " ")) {
             tempStatus = Group[switchVector[i][0]].getStatus();
             Group[switchVector[i][0]].getStatus() = Group[switchVector[i][1]].getStatus();

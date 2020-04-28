@@ -14,7 +14,7 @@ noCycles = fgets(dataFile);
 noSwitches = fgets(dataFile);
 incubationPeriod = fgets(dataFile);
 contagionFactor = fgets(dataFile);
-deathRate = fgets(dataFile);
+% deathRate = fgets(dataFile);
 
 dataCell = textscan(dataFile, '%d %d %d %d %d', 'headerlines', 2);
 fclose(dataFile);
