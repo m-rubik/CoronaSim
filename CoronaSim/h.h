@@ -127,9 +127,12 @@ void census(int * census, Person Group[], int Length, int Width, int printFlag) 
 void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
     
     //Initialization
-    int switchVector[100][2];
+    int **switchVector = new int*[numberToShuffle];
+    for (int i = 0; i < numberToShuffle; ++i) {
+        switchVector[i] = new int[2];
+    }
+    unsigned char *is_used = new unsigned char[Length*Width]; // Flag
     int poolSize = Length*Width;
-    unsigned char is_used[10001] = {0}; // Flag
     int in;
     int im = 0;
     
@@ -168,6 +171,15 @@ void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
             Group[switchVector[i][1]].status = tempStatus;
         }
     }
+    
+    // Clean up allocated memory
+    for(int i = 0; i < numberToShuffle; ++i) {
+        delete [] switchVector[i];
+    }
+    delete [] switchVector;
+    
+    delete [] is_used;
+    
 }
 
 
@@ -176,7 +188,17 @@ void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
 void spreadInfection(int ** positionReference, Person Group[], int Length, int Width, double contagionFactor) {
     
     // Create array to keep track of who to make sick
-    int tempSick [101][101] = {0};
+    int **tempSick = new int*[Length];
+    for (int i = 0; i < Length; ++i) {
+        tempSick[i] = new int[Width];
+    }
+    for (int i = 0; i < Length; i++) {
+        for (int j = 0; j < Width; j++) {
+            tempSick[i][j] = 0;
+        }
+    }
+    
+    //tempSick [Length][Width] = {0};
     
     // Loop through people and find out who to make sick
     for (int i = 0; i < Length; i++) {
@@ -187,7 +209,8 @@ void spreadInfection(int ** positionReference, Person Group[], int Length, int W
             if (Group[(**positionReference + i*Length + j)].status == "+") {
 
                 // Create the array of people to infect
-                int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width, j + 1)} };
+                int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length - 1, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width - 1, j + 1)} };
+                
                 
                 // Assign 1 to the tempSick array that have to be infected
                 for (int k = 0; k < 4; k++) {
@@ -216,6 +239,12 @@ void spreadInfection(int ** positionReference, Person Group[], int Length, int W
     
     // Display the status each cycle
     //displayGroup(Group, Length, Width, 1);
+    
+    // Cleanup memory
+    for(int i = 0; i < Length; ++i) {
+        delete [] tempSick[i];
+    }
+    delete [] tempSick;
 }
 
 
