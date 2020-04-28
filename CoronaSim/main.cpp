@@ -24,7 +24,7 @@ double contagionFactor = 0.4;     // How contagious it is, higher is more contag
 int noSwitches = 10;              // How many pairs to switch
 int incubationLifetime = 5;       // How long people are sick and contagious
 double deathRate = 0.3;           // How deadly it is, higher is deadlier
-bool visualize = false;            // Display a visualization of the simulation
+bool visualize = false;           // Display a visualization of the simulation
 bool printCensus = false;         // Display census updates throughout simulation
 
 
@@ -51,7 +51,7 @@ static int runSimulation() {
               << "number of switches: " << noSwitches << std::endl
               << "contagion factor: " << contagionFactor << std::endl
               << "incubation lifetime: " << incubationLifetime << std::endl
-              << "death rate: " << deathRate << std::endl;
+              << "death rate: " << deathRate << std::endl << "\n";
 
     // Dynamically create the 1D array of people
     Person *Group{new Person[Length*Width]{} };
@@ -95,7 +95,7 @@ static int runSimulation() {
     
     // Infect surrounding people
     for (int i = 0; i < noCycles; i++) {
-        std::cout << "Running epoc h" << i << "..." << std::endl;
+        std::cout << "Running epoch " << i << "..." << std::endl;
         spreadInfection(positionReference, Group, Length, Width, contagionFactor);
         
         if (visualize) {
@@ -105,18 +105,12 @@ static int runSimulation() {
         census((int*) censusHistory[i], Group, Length, Width, printCensus);
         shuffleGroup(noSwitches, Group, Length, Width);
         cycleSickTimeline(Group, Length, Width, 1);
-        testSickTimeline(Group, Length, Width, incubationLifetime, deathRate, 1);
+        testSickTimeline(Group, Length, Width, incubationLifetime, 1);
     }
-    
-    std::cout << "Round\t\tH\t\t\tS\t\t\tH\t\t\tD\n";
-    //std::cout << std::setw(6);
-    for (int i = 0; i < noCycles; i++) {
-        std::cout << std::setw(3) << i << "\t\t";
-        for (int j = 0; j < 4; j++) {
-            std::cout << std::setw(5) <<  censusHistory[i][j] << "\t\t";
-        }
-        std::cout << "\n";
-    }
+    std::cout << "All epochs finished. Simulation complete.\n\n";
+
+    prettyPrintCensusHistory(noCycles, censusHistory);
+    // printCensusHistory(noCycles, censusHistory); // NOTE: Use if you don't want to add the VariadicTable library
     
     // Print data to file for plotting in Matlab
     time_t curtime;
