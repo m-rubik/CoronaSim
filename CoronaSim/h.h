@@ -183,6 +183,10 @@ public:
     std::string getStatus() {
         return status;
     }
+
+    void setStatus(std::string newStatus) {
+        status = newStatus;
+    }
     
     bool infect() {
         // Try to set status of person to Sick
@@ -316,8 +320,8 @@ void shuffleGroup(int numberToShuffle, Person *Group, int Length, int Width) {
     for (int i = 0; i < numberToShuffle-1; i++) {
         if ((Group[switchVector[i][0]].getStatus() != " ") && (Group[switchVector[i][1]].getStatus() != " ")) {
             tempStatus = Group[switchVector[i][0]].getStatus();
-            Group[switchVector[i][0]].getStatus() = Group[switchVector[i][1]].getStatus();
-            Group[switchVector[i][1]].getStatus() = tempStatus;
+            Group[switchVector[i][0]].setStatus(Group[switchVector[i][1]].getStatus());
+            Group[switchVector[i][1]].setStatus(tempStatus);
         }
     }
     
