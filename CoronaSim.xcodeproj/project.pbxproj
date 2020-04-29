@@ -23,6 +23,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		32A6A836245913D30044D0B9 /* VariadicTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VariadicTable.h; sourceTree = "<group>"; };
 		32F9A7E124281B3A00187198 /* CoronaSim */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CoronaSim; sourceTree = BUILT_PRODUCTS_DIR; };
 		32F9A7E424281B3A00187198 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		32F9A7EB24282C6D00187198 /* h.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = h.h; sourceTree = "<group>"; };
@@ -60,6 +61,7 @@
 			children = (
 				32F9A7E424281B3A00187198 /* main.cpp */,
 				32F9A7EB24282C6D00187198 /* h.h */,
+				32A6A836245913D30044D0B9 /* VariadicTable.h */,
 			);
 			path = CoronaSim;
 			sourceTree = "<group>";
