@@ -51,7 +51,10 @@ static int runSimulation() {
               << "incubation lifetime: " << incubationLifetime << std::endl << "\n";
 
     // Dynamically create the 1D array of people
+    srand(time(NULL));
     Person *Group{new Person[Length*Width]{} };
+
+    prettyPrintPopulation();
     
     // Dynamically create the position vector
     int **positionReference = new int*[Length];

@@ -12,6 +12,43 @@
 #include "VariadicTable.h"
 #include <sstream>
 
+
+struct person {
+    int child_M = 0;
+    int child_F = 0;
+    int young_M = 0;
+    int young_F = 0;
+    int middle_M = 0;
+    int middle_F = 0;
+    int senior_M = 0;
+    int senior_F = 0;
+    int total = 0;
+} population;
+
+void prettyPrintPopulation(){
+    std::cout << "Demographic information\n";
+    // Construct an empty table
+    VariadicTable<std::string, std::string, double> vt({"Age Range", "Gender", "Percentage (%)"});
+    // Populate table with population information
+    vt.addRow("0-17", "Male", float(population.child_M)/float(population.total) * 100);
+    vt.addRow("0-17", "Female", float(population.child_F)/float(population.total) * 100);
+    vt.addRow("18-44", "Male", float(population.young_M)/float(population.total) * 100);
+    vt.addRow("18-44", "Female", float(population.young_F)/float(population.total) * 100);
+    vt.addRow("45-64", "Male", float(population.middle_M)/float(population.total) * 100);
+    vt.addRow("45-64", "Female", float(population.middle_F)/float(population.total) * 100);
+    vt.addRow("65+", "Male", float(population.senior_M)/float(population.total) * 100);
+    vt.addRow("65+", "Female", float(population.senior_F)/float(population.total) * 100);
+    vt.print(std::cout);
+    std::cout << std::endl;
+}
+
+// Utiliy function for generating a random double within a range fMin to fMax
+double fRand(double fMin, double fMax)
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
 class Person {
 private:
     int age, sickTime, position[2], group; 
@@ -21,13 +58,83 @@ private:
 
 public:
     Person(){ // Class constructor
-        // Randomly generated age of the person
-        age = rand() % 100;
 
-        // 5% chance of having an underlying condition
-        underlyingCondition = (rand() % 100) < 5;
+        /*
+        Looking at the 2019 census information for population age in Canada:
+        https://www.statista.com/statistics/444858/canada-resident-population-by-gender-and-age-group/
 
-        // Determine the death rate (based on data from the NYC outbreak)
+        --- Statistics ---
+        0-17 Male: 9.81%
+        0-17 Female: 9.39%
+        Total: 19.2 %
+
+        18-44 Male: 18.41%
+        18-44 Female: 17.8%
+        Total: 36.21 %
+
+        45-64 Male: 13.41%
+        45-64 Female: 13.62%
+        Total: 27.03 %
+
+        65+ Male: 8.06%
+        65+ Female: 9.5%
+        Total: 17.56 %
+
+        */
+        double val = fRand(0, 100);
+        if (0 <= val && val <= 9.81){
+            age = (rand() % 17) + 0;
+            std::string gender = "Male";
+            population.child_M += 1;
+            population.total += 1;
+        }
+        else if (9.81 < val && val <= 19.2){ // 9.81 + 9.39 = 19.2
+            age = (rand() % 17) + 0;
+            std::string gender = "Female";
+            population.child_F += 1;
+            population.total += 1;
+        }
+        else if (19.2 < val && val <= 37.61){ // 19.2 + 18.41 = 37.61
+            age = (rand() % 44) + 18;
+            std::string gender = "Male";
+            population.young_M += 1;
+            population.total += 1;
+        }
+        else if (37.61 < val && val <= 55.41){ // 37.61 + 17.8 = 55.41
+            age = (rand() % 44) + 18;
+            std::string gender = "Female";
+            population.young_F += 1;
+            population.total += 1;
+        }
+        else if (55.41 < val && val <= 68.82){ // 55.41 + 13.21 = 68.82
+            age = (rand() % 64) + 45;
+            std::string gender = "Male";
+            population.middle_M += 1;
+            population.total += 1;
+        }
+        else if (68.82 < val && val <= 82.44){ // 68.82 + 13.62 = 82.44
+            age = (rand() % 64) + 45;
+            std::string gender = "Female";
+            population.middle_F += 1;
+            population.total += 1;
+        }
+        else if (82.44 < val && val <= 90.5){ // 82.44 + 8.06 = 90.5
+            age = (rand() % 100) + 65;
+            std::string gender = "Male";
+            population.senior_M += 1;
+            population.total += 1;
+        }
+        else if (90.5 < val && val <= 100){ // 90.5 + 9.5 = 100
+            age = (rand() % 100) + 65;
+            std::string gender = "Female";
+            population.senior_F += 1;
+            population.total += 1;
+        }
+
+        /*
+        Death rate is determined from the data provided from the NYC outbreak as of April 14th
+        https://www.worldometers.info/coronavirus/coronavirus-age-sex-demographics/
+        */
         if (underlyingCondition){
             if (0 <= age && age <= 17){
                 deathRate = 0.0004;
@@ -71,12 +178,6 @@ public:
         
         // Unit time that the person has been infected
         sickTime = 0;
-        
-        // Position of the person, this is not currently being used
-        position[2];
-        
-        // Which group is the person in
-        group;
     }
 
     std::string getStatus() {
@@ -258,7 +359,6 @@ void spreadInfection(int ** positionReference, Person Group[], int Length, int W
 
                 // Create the array of people to infect
                 int target[4][2] = { {std::max(0, i - 1), j}, {std::min(Length - 1, i + 1), j}, {i, std::max(0, j - 1)}, {i, std::min(Width - 1, j + 1)} };
-                
                 
                 // Assign 1 to the tempSick array that have to be infected
                 for (int k = 0; k < 4; k++) {
