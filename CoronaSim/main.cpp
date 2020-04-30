@@ -26,7 +26,7 @@ int incubationLifetime = 5;       // How long people are sick and contagious
 bool visualize = false;           // Display a visualization of the simulation
 bool printCensus = false;         // Display census updates throughout simulation
 
-
+// Displays the help menu
 static void show_usage(std::string name) {
     std::cerr << "Usage:\n"
               << "\t-h,--help\t\tShow this help message\n"
@@ -39,6 +39,32 @@ static void show_usage(std::string name) {
               << "\t-v,--visualize\tDisplay a visualization of the simulation\n"
               << "\t-p,--printCensus\tDisplay census updates throughout simulation\n"
               << std::endl;
+}
+
+// Generates a MATLAB .m file that can be run to create a 3D matrix
+void exportToMatlab(int noCycles, std::string *** completeHistory){
+    int healthy=0, infected=3, recovered=1, dead=2; // We don't want to work with ".", "+", "-" and " " in MATLAB
+    std::ofstream outFile;
+    remove("completeHistory.m"); // Delete the file if it already exists
+    outFile.open ("completeHistory.m", std::ios::out | std::ios::app);
+    for (int i = 0; i < noCycles; i++) {
+        outFile << "outMat(:,:," << i+1 << ") = [";
+		for (int j = 0; j < Length; j++) {
+            if (j != 0) {outFile << " ";}
+			for (int k = 0; k < Width; k++){
+                if (completeHistory[i][j][k] == "."){outFile << healthy;}
+                else if (completeHistory[i][j][k] == "+"){outFile << infected;}
+                else if (completeHistory[i][j][k] == "-"){outFile << recovered;}
+                else if (completeHistory[i][j][k] == " "){outFile << dead;}
+                else {outFile << 4;}
+                // outFile << "\"" << completeHistory[i][j][k] << "\"";
+                if (k != Width-1) { outFile << " ";};
+            }
+            if (j != Length-1){outFile << ";";}
+	   	}
+        outFile << "];" << std::endl;
+	}
+    outFile.close();
 }
 
 static int runSimulation() {
@@ -81,7 +107,23 @@ static int runSimulation() {
             censusHistory[i][j] = noCycles*i + j;
         }
     }
-    
+
+
+    // Create full history container
+    std::string ***completeHistory = new std::string **[noCycles];
+    for(int i = 0; i < noCycles; i++) {
+        completeHistory[i] = new std::string *[Length];
+        for (int j = 0; j < Length; j++) {
+            completeHistory[i][j] = new std::string [Width];
+        }
+    }
+    std::string historyPlaceholder = "?";
+    for (int i = 0; i < noCycles; i++)
+		for (int j = 0; j < Length; j++)
+			for (int k = 0; k < Width; k++)
+                completeHistory[i][j][k] = historyPlaceholder;
+
+
     // Infect a random person
     srand((unsigned int) time(NULL)); //time(NULL)
     int vector = rand() % (Length*Width);
@@ -89,9 +131,10 @@ static int runSimulation() {
     
     // Display first infected person
     if (visualize) {
+        std::cout << "Initial infection...\n";
         displayGroup(Group, Length, Width);
     }
-    census((int*) censusHistory[0], Group, Length, Width, printCensus);
+    census((int*) censusHistory[0], (std::string**) completeHistory[0], Group, Length, Width, printCensus);
     
     // Infect surrounding people
     for (int i = 0; i < noCycles; i++) {
@@ -102,7 +145,7 @@ static int runSimulation() {
             displayGroup(Group, Length, Width);
         }
         
-        census((int*) censusHistory[i], Group, Length, Width, printCensus);
+        census((int*) censusHistory[i], (std::string**) completeHistory[i], Group, Length, Width, printCensus);
         shuffleGroup(noSwitches, Group, Length, Width);
         cycleSickTimeline(Group, Length, Width, 1);
         testSickTimeline(Group, Length, Width, incubationLifetime, 1);
@@ -129,6 +172,9 @@ static int runSimulation() {
     }
     outfile.close();
 
+    // Copy the full history data to a matlab
+    exportToMatlab(noCycles, completeHistory);
+
     // Cleanup memory allocated for arrays
     delete[] Group;
 
@@ -141,6 +187,14 @@ static int runSimulation() {
         delete [] censusHistory[i];
     }
     delete [] censusHistory;
+
+	for (int i = 0; i < noCycles; i++) {
+		for (int j = 0; j < Length; j++)
+			delete[] completeHistory[i][j];
+
+		delete[] completeHistory[i];
+	}
+	delete[] completeHistory;
     
     return 0;
 }
