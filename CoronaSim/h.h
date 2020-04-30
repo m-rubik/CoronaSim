@@ -252,7 +252,7 @@ void displayGroup (Person Group[], int Length, int Width) {
 }
 
 // Save the current census of the group to census array
-void census(int * census, Person Group[], int Length, int Width, int printFlag) {
+void census(int * census, std::string ** completeHistory, Person Group[], int Length, int Width, int printFlag) {
     
     census[0] = 0;
     census[1] = 0;
@@ -261,6 +261,7 @@ void census(int * census, Person Group[], int Length, int Width, int printFlag) 
     
     for (int i = 0; i < Length; i++) {
         for (int j = 0; j < Width; j++) {
+            completeHistory[i][j] = Group[Length*i + j].getStatus();
             if (Group[Length*i + j].getStatus() == ".") {census[0]++;}
             if (Group[Length*i + j].getStatus() == "+") {census[1]++;}
             if (Group[Length*i + j].getStatus() == "-") {census[2]++;}
