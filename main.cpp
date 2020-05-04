@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <string>
 #include <string.h>
-#include "h.h"
+#include "src/h.h"
 
 // Declare all defaults. These will get overriden by the command line arguments
 int Length = 40;                  // Population grid length
